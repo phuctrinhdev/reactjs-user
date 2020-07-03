@@ -1,25 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense } from 'react';
+import './App.scss';
+import { BrowserRouter, Switch, Redirect, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
+//Lazy load component
+const Home = React.lazy(() => import('./features/Home'));
+const Page404 = React.lazy(() => import('./components/Page404'));
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <Suspense fallback={<div>Loading...</div>} >
+        <BrowserRouter>
+          <Header />
+
+          {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+          <Switch>
+            <Redirect exact from="/" to="/home"></Redirect>
+            
+            <Route path="/home" component={Home}></Route> 
+            <Route path="/404" component={Page404}></Route>
+            <Redirect from='*' to='/404' />
+          </Switch>
+
+          <Footer />
+        </BrowserRouter>
+      </Suspense>
+    </React.Fragment>
   );
 }
 
