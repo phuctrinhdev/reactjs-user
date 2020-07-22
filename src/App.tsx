@@ -6,6 +6,7 @@ import Header from './components/Header';
 
 //Lazy load component
 const Home = React.lazy(() => import('./features/Home'));
+const Product = React.lazy(() => import('./features/Product'));
 const Page404 = React.lazy(() => import('./components/Page404'));
 
 function App() {
@@ -20,7 +21,8 @@ function App() {
           <Switch>
             <Redirect exact from="/" to="/home"></Redirect>
             
-            <Route path="/home" component={Home}></Route> 
+            <Route path="/home" component={Home}></Route>
+            <Route path="/product" component={Product}></Route>
             <Route path="/404" component={Page404}></Route>
 
             <Redirect from='*' to='/404' />

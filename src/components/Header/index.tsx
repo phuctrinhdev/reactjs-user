@@ -12,12 +12,10 @@ function Header() {
         <NavLink to="/home">Reactjs Photo App</NavLink>
       </h5>
       <Nav className="my-2 my-md-0 mr-md-3">
-        <a className="p-2 text-dark" href="#">Features</a>
-        <a className="p-2 text-dark" href="#">Enterprise</a>
-        <a className="p-2 text-dark" href="#">Support</a>
-        <a className="p-2 text-dark" href="#">Pricing</a>
+        <NavLink to="/product" activeStyle={{ fontWeight: "bold", color: "red" }} className="p-2 text-dark">Product</NavLink>
+        <NavLink to="/company" activeStyle={{ fontWeight: "bold", color: "red" }} className="p-2 text-dark">Company</NavLink>
       </Nav>
-      <a className="btn btn-outline-primary" href="#">Sign up</a>
+      <a className="btn btn-outline-primary" href="!#">Sign up</a>
     </header>
   )
 }
