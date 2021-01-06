@@ -1,28 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Card, CardHeader, CardBody } from 'reactstrap';
+import { Button, Col, Container, Row } from 'reactstrap';
 import Banner from 'components/Banner';
 import BackgroundImages from 'constants/background-images';
 import productApi from 'api/productApi';
 import './Home.scss';
-import { Link } from 'react-router-dom';
+import ProductItem from 'components/ProductItem';
+import PropTypes from 'prop-types';
+import { LIMIT, PAGE } from 'constants/constant';
 
-Home.propTypes = {};
+interface IHome {
 
-function Home() {
-  const [productList, setProductList] = useState([]);
+}
+
+const Home = () => {
+  const [productList, setProductList] = useState<IHome[]>([]);
+  const [page, setPage] = useState(PAGE);
+  const [loading, setLoading] = useState(false);
+
+  const limit = LIMIT;
+  const fetchProductList = async (page: number, limit: number) => {
+    try {
+      const product_list: any = await productApi.getList({ page: page, limit: limit });
+      setProductList(productList => [...productList, ...product_list]);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const onHandelLoadMore = () => {
+    setLoading(true);
+    setPage((page) => page + 1);
+  }
 
   useEffect(() => {
-    const fetchProductList = async () => {
-      try {
-        const product_list: any = await productApi.getList({ page: 1, limit: 12 });
-        setProductList(product_list);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    fetchProductList(page, limit);
+  }, [page]);
 
-    fetchProductList();
-  }, []);
   return (
     <>
       <Banner title="🎉 Your awesome photos 🎉" backgroundUrl={BackgroundImages.PINK_BG} />
@@ -32,27 +46,34 @@ function Home() {
       </div>
       <Container>
         <div className="card-deck mb-3 text-center">
-          {productList.map((item: any, key: number) => 
-            <Card className="card mb-4 shadow-sm" key={key}>
-              <CardHeader>
-                <h4 className="my-0 font-weight-normal">{ item.department }</h4>
-              </CardHeader>
-              <CardBody>
-                <h1 className="card-title pricing-card-title">${ item.price }</h1>
-                <ul className="list-unstyled mt-3 mb-4">
-                  <li>{ item.name }</li>
-                  <li>{ item.color }</li>
-                  <li>{ item.adjective }</li>
-                  <li>{ item.material }</li>
-                </ul>
-                <Link to={"product/" + item.id} className="btn btn-lg btn-block btn-outline-primary">View detail</Link>
-              </CardBody>
-            </Card>
+          {productList.map((item: any, key: number) =>
+            <ProductItem key={key} {...item} />
           )}
         </div>
+        {productList.length > 0 && (
+          <Row>
+            <Col sm="12">
+              <div className="text-center">
+                <Button color="primary" onClick={() => onHandelLoadMore()}>
+                  {loading && (
+                    <i className="fa fa-circle-o-notch fa-spin"></i>
+                  )} Load more
+              </Button>
+              </div>
+            </Col>
+          </Row>
+        )}
       </Container>
     </>
   );
+}
+
+Home.propTypes = {
+  productList: PropTypes.array,
+};
+
+Home.defaultProps = {
+  productList: [],
 }
 
 export default Home;
