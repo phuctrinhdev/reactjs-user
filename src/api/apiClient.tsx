@@ -1,10 +1,13 @@
 import axios from 'axios';
 import queryString from 'query-string';
 
+const apiUrl = process.env.REACT_APP_MOCK_API_URL;
+const prefix = process.env.REACT_APP_MOCK_API_PREFIX;
+const version = process.env.REACT_APP_MOCK_API_VERSION;
 // Set up default config for http requests here
 // Please have a look at here `https://github.com/axios/axios#request- config` for the full list of configs
 const axiosClient = axios.create({
-  baseURL: process.env.REACT_APP_MOCK_API_URL,
+  baseURL: `${apiUrl}/${prefix}/${version}/`,
   headers: {
     'content-type': 'application/json',
   },
