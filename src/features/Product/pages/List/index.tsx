@@ -34,11 +34,11 @@ const ProductList = () => {
 
   useEffect(() => {
     fetchProductList(page, limit);
-  }, [page]);
+  }, [page, limit]);
 
   return (
     <>
-      <Banner title="🎉 Your awesome photos 🎉" backgroundUrl={BackgroundImages.ORANGE_BG} />
+      <Banner title="🎉 Product 🎉" backgroundUrl={BackgroundImages.ORANGE_BG} />
       <Container className="mt-3">
         <div className="card-deck mb-3 text-center">
           {productList.map((item: any, key: number) =>
